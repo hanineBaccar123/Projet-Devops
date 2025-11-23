@@ -1,0 +1,1 @@
+stage('Run Frontend') {    steps {        sh 'docker run -d -p 3000:3000 --name frontend myapp-frontend'    }}stage('Smoke Test Frontend') {    steps {        sh './somektest.sh'    }}
