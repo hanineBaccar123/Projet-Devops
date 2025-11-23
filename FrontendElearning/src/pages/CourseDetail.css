@@ -1,0 +1,135 @@
+.course-detail {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.back-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.course-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.course-detail-header h1 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.course-price-large {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+}
+
+.course-description-full {
+  margin-bottom: 2rem;
+}
+
+.course-description-full h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.course-description-full p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.course-actions-admin {
+  margin-bottom: 2rem;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.comments-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.comments-section h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.comment-form {
+  margin-bottom: 2rem;
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.comment-card {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 5px;
+  border-left: 4px solid #667eea;
+}
+
+.comment-card p {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.comment-card small {
+  color: #999;
+}
+
+.comment-rating {
+  color: #667eea;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+

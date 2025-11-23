@@ -1,0 +1,121 @@
+.stats-panel {
+  width: 320px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  height: fit-content;
+  position: sticky;
+  top: 120px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stats-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.stat-item:hover {
+  transform: translateX(8px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.stat-item:hover::before {
+  opacity: 1;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  position: relative;
+  z-index: 1;
+}
+
+.stat-info {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.35rem;
+  letter-spacing: -1px;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 1200px) {
+  .stats-panel {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-top: 2rem;
+  }
+  
+  .stats-panel-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    flex: 1;
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-panel-content {
+    flex-direction: column;
+  }
+  
+  .stat-item {
+    min-width: 100%;
+  }
+}
+
