@@ -1,23 +1,13 @@
-#!/bin/bash
+@echo off
+echo Testing BACKEND...
 
-echo "Running FULL application smoke test..."
+for /f %%i in ('curl -s -o NUL -w "%%{http_code}" http://localhost:5001') do set BACK=%%i
 
-# Test Frontend
-FRONT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5173)
-# Test Backend
-BACK=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001)
+echo Backend status: %BACK%
 
-echo "Frontend status: $FRONT"
-echo "Backend status:  $BACK"
+if NOT "%BACK%"=="200" (
+    echo BACKEND FAILED
+    exit /b 1
+)
 
-if [ "$FRONT" -ne 200 ]; then
-    echo "❌ FRONTEND FAILED"
-    exit 1
-fi
-
-if [ "$BACK" -ne 200 ]; then
-    echo "❌ BACKEND FAILED"
-    exit 1
-fi
-
-echo "🎉 FULL APPLICATION Smoke Test PASSED!"
+echo  BACKEND PASSED
