@@ -10,6 +10,8 @@ const CourseCard = ({ course }) => {
       'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400',
       'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400',
       'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400',
+      'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400',
+
 
     ];
     return images[course._id?.charCodeAt(0) % images.length] || images[0];

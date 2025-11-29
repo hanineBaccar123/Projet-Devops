@@ -10,6 +10,7 @@
   position: relative;
 }
 
+
 .course-card-modern::before {
   background: linear-gradient(145deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
 }
