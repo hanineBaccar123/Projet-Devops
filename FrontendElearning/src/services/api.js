@@ -15,7 +15,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.code === 'ECONNREFUSED' || error.message.includes('Network Error')) {
-      console.error('❌ Impossible de se connecter au backend. Assurez-vous que le serveur backend est démarré sur le port 5000.');
+      console.error('❌ Impossible de se connecter au backend. Assurez-vous que le serveur backend est démarré sur le port 5001.');
       error.message = 'Le serveur backend n\'est pas accessible. Veuillez démarrer le backend avec "npm run dev" dans le dossier racine.';
     }
     return Promise.reject(error);
