@@ -1,22 +1,25 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || ''; // Utilise le proxy Vite en développement
+// Assurez-vous que VITE_API_URL est bien défini dans votre .env
+// Exemple: VITE_API_URL=http://localhost:5001
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: true, // Pour envoyer les cookies ou JWT
 });
 
 // Intercepteur pour gérer les erreurs de connexion
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Si le backend n'est pas accessible
     if (error.code === 'ECONNREFUSED' || error.message.includes('Network Error')) {
-      console.error('❌ Impossible de se connecter au backend. Assurez-vous que le serveur backend est démarré sur le port 5001.');
-      error.message = 'Le serveur backend n\'est pas accessible. Veuillez démarrer le backend avec "npm run dev" dans le dossier racine.';
+      console.error(`❌ Impossible de se connecter au backend sur ${API_URL}. Assurez-vous que le serveur backend est démarré.`);
+      error.message = `Le serveur backend n'est pas accessible (${API_URL}). Veuillez démarrer le backend avec "npm run dev".`;
     }
     return Promise.reject(error);
   }
@@ -56,4 +59,3 @@ export const paymentAPI = {
 };
 
 export default api;
-
