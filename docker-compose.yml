@@ -10,9 +10,6 @@ services:
       - "5001:5001"
     environment:
       - Url_Db=mongodb://baccarhanine:pvKCqF5yZEsIQEZj@host.docker.internal:27017
-      
-    depends_on:
-      - mongodb  # ok si mongodb est sur la machine hôte ou autre container
     restart: unless-stopped
 
   frontend:
