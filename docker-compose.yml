@@ -1,15 +1,6 @@
-services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password123
-    volumes:
-      - mongo-data:/data/db
+version: '3.8'
 
+services:
   backend:
     build:
       context: .
@@ -18,21 +9,25 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - Url_Db=mongodb+srv://baccarhanine:pvKCqF5yZEsIQEZj@cluster0.oisbgie.mongodb.net/
+      - Url_Db=mongodb://baccarhanine:pvKCqF5yZEsIQEZj@host.docker.internal:27017
+      
     depends_on:
-      - mongodb
+      - mongodb  # ok si mongodb est sur la machine hôte ou autre container
+    restart: unless-stopped
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfilefrontend
     env_file:
-    - .env.docker
+      - .env.docker
     container_name: frontend
     ports:
-      - "5371:80"  
+      - "5371:80"
     depends_on:
       - backend
+    restart: unless-stopped
 
+# volumes seulement si backend ou frontend a besoin
 volumes:
   mongo-data:
