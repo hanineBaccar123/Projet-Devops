@@ -1,44 +1,46 @@
 version: '3.8'
+
 services:
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password123
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
     volumes:
       - mongo-data:/data/db
+    restart: always
 
   backend:
-    # On donne un nom explicite à l'image avec la version
-    image: devops-backend:${VERSION:-latest}
+    image: devops-backend:${VERSION}
     build:
       context: .
       dockerfile: Dockerfilebackend
     container_name: backend
+    environment:
+      Url_Db: "mongodb+srv://baccarhanine:pvKCqF5yZEsIQEZj@cluster0.oisbgie.mongodb.net/"
     ports:
       - "5001:5001"
-    environment:
-      # Note: Idéalement, mettez cette URL dans les credentials Jenkins, pas en clair ici
-      - Url_Db=mongodb+srv://baccarhanine:pvKCqF5yZEsIQEZj@cluster0.oisbgie.mongodb.net/
     depends_on:
       - mongodb
+    restart: always
 
   frontend:
-    # Idem pour le frontend
-    image: devops-frontend:${VERSION:-latest}
+    image: devops-frontend:${VERSION}
     build:
       context: .
       dockerfile: Dockerfilefrontend
+    container_name: frontend
     env_file:
       - .env.docker
-    container_name: frontend
     ports:
-      - "5371:80"  
+      - "5371:80"
     depends_on:
       - backend
+    restart: always
 
 volumes:
   mongo-data:

@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     environment {
-        // Récupère le tag s'il existe, sinon "latest"
         VERSION = "${env.TAG_NAME ?: 'latest'}"
 
         IMAGE_BACKEND = "devops-backend"
         IMAGE_FRONTEND = "devops-frontend"
 
-        // Nom pour isoler Docker Compose
+        // Inject VERSION inside docker-compose
         COMPOSE_PROJECT_NAME = "versionne_project"
     }
 
@@ -18,7 +17,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    echo "Déploiement de la version : ${VERSION}"
+                    echo "Déploiement version : ${VERSION}"
                 }
                 checkout scm
             }
@@ -30,22 +29,26 @@ pipeline {
                 script {
                     echo "Nettoyage complet de l'environnement..."
 
-                    // Supprime conteneurs bloquants (ex: mongodb déjà utilisé)
+                    // REMOVE ALL OLD CONTAINERS to prevent conflicts
                     bat """
-                    docker rm -f mongodb 2>nul || echo mongodb non présent
+                    docker rm -f backend 2>nul || echo backend non present
+                    docker rm -f frontend 2>nul || echo frontend non present
+                    docker rm -f mongodb 2>nul || echo mongodb non present
+
                     docker-compose down --remove-orphans || exit 0
                     """
                 }
             }
         }
 
-        // 3. Build (Parallèle)
+        // 3. Build (Parallel)
         stage('Build Parallel') {
             parallel {
+
                 stage('Build Backend') {
                     steps {
                         script {
-                            echo "Building Backend..."
+                            echo "Building backend..."
                             bat """docker build -f Dockerfilebackend -t ${IMAGE_BACKEND}:${VERSION} ."""
                         }
                     }
@@ -54,22 +57,27 @@ pipeline {
                 stage('Build Frontend') {
                     steps {
                         script {
-                            echo "Building Frontend..."
+                            echo "Building frontend..."
                             bat """docker build -f Dockerfilefrontend -t ${IMAGE_FRONTEND}:${VERSION} ."""
                         }
                     }
                 }
+
             }
         }
 
-        // 4. Run Containers
+        // 4. Run
         stage('Run (Docker)') {
             steps {
                 script {
-                    echo "Lancement des conteneurs Docker..."
-                    bat "docker-compose up -d"
+                    echo "Lancement des conteneurs..."
 
-                    echo "Pause 15 sec pour le démarrage..."
+                    // Pass VERSION to docker-compose using environment
+                    bat """
+                    set VERSION=${VERSION}
+                    docker-compose up -d
+                    """
+
                     sleep 15
                 }
             }
@@ -79,15 +87,11 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 script {
-                    echo "Exécution du smoke test Windows..."
+                    echo "Exécution du smoke test..."
 
-                    // Exécute le script et FAIL si code != 0
                     bat """
                     call smoke_test_full.bat
-                    if %ERRORLEVEL% NEQ 0 (
-                        echo Smoke Test FAILED
-                        exit 1
-                    )
+                    if %ERRORLEVEL% NEQ 0 exit 1
                     """
                 }
             }
@@ -97,9 +101,8 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 script {
-                    echo "Archivage des logs Docker..."
+                    echo "Archivage des logs..."
 
-                    // Capture des logs pour chaque service
                     bat "docker-compose logs backend > backend.log"
                     bat "docker-compose logs frontend > frontend.log"
                     bat "docker-compose logs mongodb > mongodb.log"
@@ -116,18 +119,15 @@ pipeline {
                 echo "Nettoyage final..."
                 bat "docker-compose down"
 
-                // cleanWs si plugin disponible, sinon ignore
-                try {
-                    cleanWs()
-                } catch (Exception e) {
-                    echo "cleanWs non disponible, ignoré."
-                }
+                try { cleanWs() }
+                catch (Exception e) { echo "cleanWs non disponible" }
             }
         }
 
         success {
             echo "Pipeline Versionné ${VERSION} : RÉUSSI"
         }
+
         failure {
             echo "Pipeline Versionné ${VERSION} : ÉCHOUÉ"
         }
