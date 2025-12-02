@@ -1,9 +1,14 @@
-FROM nginx:alpine
+FROM node:18-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-COPY ./FrontendElearning /usr/share/nginx/html
+COPY ./backendElearning/package*.json ./
+RUN npm install
 
-EXPOSE 80
+COPY ./backendElearning .
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 5001
+
+ENV PORT=5001
+
+CMD ["npm", "start"]

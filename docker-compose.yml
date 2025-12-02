@@ -15,21 +15,22 @@ services:
     restart: always
 
   backend:
-    image: devops-backend:${VERSION}
+    image: devops-backend:${VERSION:-latest}
     build:
       context: .
       dockerfile: Dockerfilebackend
     container_name: backend
-    environment:
-      Url_Db: "mongodb+srv://baccarhanine:pvKCqF5yZEsIQEZj@cluster0.oisbgie.mongodb.net/"
     ports:
       - "5001:5001"
+    environment:
+      - PORT=5001
+      - Url_Db=mongodb://admin:password123@mongodb:27017/
     depends_on:
       - mongodb
     restart: always
 
   frontend:
-    image: devops-frontend:${VERSION}
+    image: devops-frontend:${VERSION:-latest}
     build:
       context: .
       dockerfile: Dockerfilefrontend
