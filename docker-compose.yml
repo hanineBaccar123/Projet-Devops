@@ -14,6 +14,7 @@ services:
       - mongo-data:/data/db
     restart: always
 
+
   backend:
     image: devops-backend:${VERSION:-latest}
     build:
